@@ -48,7 +48,7 @@ int main()
                 printf("Cadena capitalizada: %s\n", cadena);
                 break;
             }
-        // Aquí irían los demás casos del menú, llamando las otras funciones.
+       
         case 0:
             printf("Saliendo...\n");
             break;
@@ -67,7 +67,7 @@ void mostrar_menu()
     printf("\n--- Menu de Opciones ---\n");
     printf("1. Buscar la ultima ocurrencia de una subcadena\n");
     printf("2. Capitalizar una cadena de texto\n");
-    // Más opciones del menú
+   
     printf("0. Salir\n");
     printf("Elija una opcion: ");
 }
