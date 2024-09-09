@@ -1,3 +1,0 @@
-C:/Users/Juan Vargas/CLionProjects/tallerProgra/cmake-build-debug/CMakeFiles/tallerProgra.dir
-C:/Users/Juan Vargas/CLionProjects/tallerProgra/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Juan Vargas/CLionProjects/tallerProgra/cmake-build-debug/CMakeFiles/rebuild_cache.dir
