@@ -72,17 +72,18 @@ void mostrar_menu()
     printf("Elija una opcion: ");
 }
 
-// Buscar la última ocurrencia de una subcadena
-int buscar_ultima_ocurrencia(char cadena[], char subcadena[])
-{
+// Función para buscar la última ocurrencia de una subcadena
+int buscar_ultima_ocurrencia(char cadena[], char subcadena[]) {
     int ultima_pos = -1;
-    char* ptr = strstr(cadena, subcadena);
-    while (ptr != NULL)
-    {
-        ultima_pos = ptr - cadena;
-        ptr = strstr(ptr + 1, subcadena);
+    char* ptr = strstr(cadena, subcadena);  // Buscar la primera ocurrencia
+
+    // Iterar mientras se encuentren ocurrencias
+    while (ptr != NULL) {
+        ultima_pos = ptr - cadena;  // Actualizar la última posición encontrada
+        ptr = strstr(ptr + 1, subcadena);  // Buscar desde la siguiente posición
     }
-    return ultima_pos;
+
+    return ultima_pos >= 0 ? ultima_pos + 1 : 0;  // Retornar 0 si no hay ocurrencia
 }
 
 // Capitalizar una cadena de texto
