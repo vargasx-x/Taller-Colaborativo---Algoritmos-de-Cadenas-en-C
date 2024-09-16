@@ -236,12 +236,11 @@ int main() {
 
             // Verificar si la cadena de texto es palíndroma
                 if (isPalindrome(cadena)) {
-                    printf("La cadena es un palíndromo.\n");
+                    printf("La cadena de texto es un palindromo.\n");
                 } else {
-                    printf("La cadena NO es un palíndromo.\n");
+                    printf("La cadena de texto NO es un palindromo.\n");
                 }
 
-                return 0;
 
                 break;
             }
