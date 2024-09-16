@@ -13,7 +13,7 @@ void capitalizar_cadena(char cadena[]);
 
 int verificar_final_cadena(char cadena[], char subcadena[]);
 
-void formatear_valor_numerico(int valor, char *resultado);
+void formatear_valor_numerico(int valor);
 
 int es_palindromo(char cadena[]);
 
@@ -97,6 +97,30 @@ int main() {
                 intoJoinString();
                 break;
             }
+            case 5:{
+                char cadena[100], subcadena[50];
+                printf("Ingrese la cadena principal: ");
+                fgets(cadena, 100, stdin);
+                printf("Ingrese la subcadena a revisar: ");
+                fgets(subcadena, 50, stdin);
+                int bool = verificar_final_cadena(cadena, subcadena);
+                if (bool == 0)
+                    printf("La subcadena no finaliza la cadena principal \n");
+                else
+                    printf("La subcadena finaliza la cadena principal\n");
+                break;
+                break;
+            }
+
+            case 6: {
+                int valor;
+                printf("Ingrese el numero a formatear ");
+                scanf("%d", &valor);  // Leer el número ingresado por teclado
+                formatear_valor_numerico(valor);
+                printf("Valor formateado: %s\n", valor);
+                break;
+            }
+
             case 0:
                 printf("Saliendo...\n");
                 break;
@@ -115,6 +139,8 @@ void mostrar_menu() {
     printf("2. Capitalizar una cadena de texto\n");
     printf("3. Dividir una Cadena en un arreglo de Caracteres\n");
     printf("4. Unir arreglo de caracteres en una cadena\n");
+    printf("5. Verificar si una cadena de texto termina con otra\n");
+    printf("6. Formatear un valor numerico\n");
 
     printf("0. Salir\n");
     printf("Elija una opcion: ");
@@ -145,4 +171,63 @@ void capitalizar_cadena(char cadena[]) {
             capitalizar = 0;
         }
     }
+}
+int verificar_final_cadena(char cadena[], char subcadena[]) {
+    int long_cadena = strlen(cadena);       // Longitud de la cadena
+    int long_subcadena = strlen(subcadena);
+
+    // Verificar si la subcadena es más larga que la cadena principal
+    if (long_subcadena > long_cadena) {
+        return 0;
+    }
+
+    int pos_inicio_sub = long_cadena - long_subcadena;
+
+    // Comparamos cada carácter de la subcadena con los caracteres finales de la cadena
+    for (int i = 0; i < long_subcadena; i++) {
+        char caracter_cadena = cadena[pos_inicio_sub + i];
+        char caracter_subcadena = subcadena[i];
+
+        if (caracter_cadena != caracter_subcadena) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+void formatear_valor_numerico(int valor) {
+    char num[20];
+    char num_formateado[30]; // Arreglo para almacenar la versión con separadores y signo de pesos
+    int len_num, i, j = 0;
+    int contador = 0;
+
+    // Convertir el número a cadena de texto
+    sprintf(num, "%d", valor);
+
+    len_num = strlen(num);
+
+    num_formateado[j++] = '$';
+
+    // Calcular cuántos dígitos vienen antes del primer separador de miles
+    int primeros_digitos = strlen(num) % 3;
+    if (primeros_digitos == 0) {
+        primeros_digitos = 3;
+    }
+
+    // Copiar los primeros dígitos sin separador
+    for (i = 0; i < primeros_digitos; i++) {
+        num_formateado[j++] = num[i];
+    }
+
+    // Añadir separadores de miles para el resto de los dígitos
+    for (; i < len_num; i++) {
+        if ((i - primeros_digitos) % 3 == 0) {
+            num_formateado[j++] = ',';  
+        }
+        num_formateado[j++] = num[i];
+    }
+
+    // Imprimir el número formateado
+    printf("Valor formateado: %s\n", num_formateado);
 }
