@@ -15,9 +15,62 @@ int verificar_final_cadena(char cadena[], char subcadena[]);
 
 void formatear_valor_numerico(int valor);
 
-int es_palindromo(char cadena[]);
+int isPalindrome(char cadena[]) {
+    int inicio = 0;
+    int fin = strlen(cadena) - 1;
 
-int validar_parentesis(char cadena[]);
+    for (int i = 0; cadena[i] != '\0'; i++) {
+        if (isdigit(cadena[i])) {
+            printf("Error: La cadena contiene valores numericos, solo se permiten letras.\n");
+            return 0; // Si contiene números, no es válida.
+        }
+    }
+
+    // Recorremos la cadena de extremo a extremo
+    while (inicio < fin) {
+
+        // Ignoramos los caracteres que no sean letras o dígitos numéricos
+        if (!isalnum(cadena[inicio])) {
+            inicio++;
+        } else if (!isalnum(cadena[fin])) {
+            fin--;
+        } else {
+            // Comparar los caracteres en minúsculas
+            if (tolower(cadena[inicio]) != tolower(cadena[fin])) {
+                return 0; // No es un palíndromo
+            }
+            inicio++;
+            fin--;
+        }
+    }
+    return 1; // Es un palíndromo
+}
+
+int validate_parentheses(char cadena[]) {
+    
+    int apertura = 0; 
+    int pares = 0;   
+    for (int i = 0; cadena[i] != '\0'; i++) {
+        if (cadena[i] == '(') {
+            apertura++; // Encontrar paréntesis de apertura
+        } else if (cadena[i] == ')') {
+            if (apertura > 0) {
+                apertura--; // Encontrar paréntesis de cierre que corresponde al de apertura
+                pares++;   // Incrementamos el número de pares
+            } else {
+                // Si encontramos un paréntesis de cierre sin uno de apertura correspondiente
+                return -1; // Indicar que los paréntesis no están balanceados
+            }
+        }
+    }
+    if (apertura == 0) {
+        // Retorna el número de parentesis pares, si no queda ningún paréntesis sin cerrar
+        return pares;
+    } else {
+        // Si la apertura es diferente de 0, hay paréntesis de apertura sin cerrar
+        return -1;
+    }
+}
 
 void mostrar_menu();
 
@@ -121,6 +174,43 @@ int main() {
                 break;
             }
 
+            case 7:{
+                char cadena[50];
+                
+                printf("Introduce una cadena de texto: ");
+                fgets(cadena, sizeof(cadena), stdin);
+
+            // Eliminamos el salto de línea
+                cadena[strcspn(cadena, "\n")] = 0;
+
+            // Verificar si la cadena de texto es palíndroma
+                if (isPalindrome(cadena)) {
+                    printf("La cadena es un palíndromo.\n");
+                } else {
+                    printf("La cadena NO es un palíndromo.\n");
+                }
+
+                return 0;
+
+                break;
+            }
+
+            case 8:{
+                char cadena[100];
+                printf("Ingrese una cadena para validar los parentesis: ");
+                fgets(cadena, 100, stdin);
+    
+                int resultado = validate_parentheses(cadena);
+    
+                if (resultado == -1) {
+                    printf("Los parentesis de apertura NO corresponden a los de cierre.\n");
+                } else {
+                    printf("Los parentesis de apertura y cierre son correctos, y hay %d pares correctos.\n", resultado);
+                }
+                break;
+
+            }
+
             case 0:
                 printf("Saliendo...\n");
                 break;
@@ -141,6 +231,8 @@ void mostrar_menu() {
     printf("4. Unir arreglo de caracteres en una cadena\n");
     printf("5. Verificar si una cadena de texto termina con otra\n");
     printf("6. Formatear un valor numerico\n");
+    printf("7. Verificar si una cadena de texto es palíndroma\n");
+    printf("8. Validar parentesis\n");
 
     printf("0. Salir\n");
     printf("Elija una opcion: ");
