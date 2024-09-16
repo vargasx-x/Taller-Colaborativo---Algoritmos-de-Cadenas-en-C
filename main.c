@@ -3,9 +3,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-#include "JoinArray.h"
-#include "SplitString.h"
-
 // Prototipos de funciones
 int buscar_ultima_ocurrencia(char cadena[], char subcadena[]);
 
@@ -74,51 +71,75 @@ int validate_parentheses(char cadena[]) {
 
 void mostrar_menu();
 
-void intoSplitString() {
+// Función para Dividir una cadena
+char* splitString(const char *str) {
+    // Calcular la longitud de la cadena de entrada
+    int len = strlen(str);
 
-    char cadena[100];
+    // Reservar memoria para la nueva cadena, incluyendo espacio para el carácter nulo
+    char* array = (char*) malloc((len + 1) * sizeof(char));
 
-    printf("Ingrese una cadena: ");
-    fgets(cadena, sizeof(cadena), stdin);
-
-    cadena[strcspn(cadena, "\n")] = '\0';
-
-    char *arreglo = splitString(cadena);
-
-    if (arreglo != NULL) {
-        printf("El apuntador al arreglo de caracteres es: %p\n", (void *) arreglo);
-        printf("La cadena copiada en el arreglo es: %s\n", arreglo);
-        free(arreglo);
+    // Verificar si la asignación de memoria fue exitosa
+    if (array == NULL) {
+        printf("Error al asignar memoria.\n");  // Mensaje de error en español
+        return NULL;  // Devolver NULL para indicar fallo
     }
+
+    // Copiar la cadena de entrada a la memoria recién asignada
+    strcpy(array, str);
+
+    // Devolver el puntero a la nueva cadena
+    return array;
 }
 
-void intoJoinString() {
-    char separador;
-    printf("Introduce el separador de palabras: ");
-    scanf(" %c", &separador);
+// Función para unir palabras en una cadena usando un separador
+char* joinString(char* string, char separator) {
+    // Calcular la longitud de la cadena de entrada
+    int length = strlen(string);
 
-    getchar();
+    // Contar el número de palabras en la cadena (asumiendo que las palabras están separadas por espacios)
+    int word_count = 1;
+    for (int i = 0; i < length; i++) {
+        if (string[i] == ' ') {
+            word_count++;
+        }
+    }
 
-    char cadena[1000];
-    printf("Introduce la cadena de palabras separadas por espacios: ");
-    fgets(cadena, sizeof(cadena), stdin);
+    // Calcular la longitud total de la nueva cadena, considerando el separador
+    // longitud original + (número de palabras - 1) + 1 (para el carácter nulo)
+    int total_length = length + (word_count - 1) + 1;
 
-    cadena[strcspn(cadena, "\n")] = 0;
+    // Reservar memoria para la nueva cadena
+    char* result = (char*)malloc(total_length * sizeof(char));
+    if (result == NULL) {
+        printf("Error al asignar memoria.\n");  // Mensaje de error en inglés
+        exit(1);  // Terminar el programa si la asignación de memoria falla
+    }
 
-    char* resultado = unir_cadena(cadena, separador);
+    // Copiar la cadena original a la nueva cadena, reemplazando los espacios con el separador
+    int j = 0;
+    for (int i = 0; i < length; i++) {
+        if (string[i] == ' ') {
+            result[j++] = separator;  // Reemplazar espacio con el separador
+        } else {
+            result[j++] = string[i];  // Copiar el carácter original
+        }
+    }
+    result[j] = '\0';  // Añadir el carácter nulo al final de la nueva cadena
 
-    printf("Cadena resultante: %s\n", resultado);
-
-    free(resultado);
+    // Devolver el puntero a la nueva cadena
+    return result;
 }
+
 
 // Función principal
 int main() {
+    char* array = NULL;
     int opcion;
     do {
         mostrar_menu();
         scanf("%d", &opcion);
-        getchar(); // Limpiar el buffer de entrada
+        getchar();
 
         switch (opcion) {
             case 1: {
@@ -143,11 +164,41 @@ int main() {
                 break;
             }
             case 3:{
-                intoSplitString();
+                char input[100];
+
+                printf("Ingrese una cadena: ");
+                fgets(input, sizeof(input), stdin);
+
+                input[strcspn(input, "\n")] = '\0';
+
+                char *array = splitString(input);
+
+                if (array != NULL) {
+                    printf("El apuntador al arreglo de caracteres es: %p\n", (void *) array);
+                    printf("La cadena copiada en el arreglo es: %s\n", array);
+                    free(array);
+                }
+
                 break;
             }
             case 4:{
-                intoJoinString();
+                char separator;
+                printf("Introduce el separador de palabras: ");
+                scanf(" %c", &separator);
+
+                getchar();
+
+                char string[1000];
+                printf("Introduce la cadena de palabras separadas por espacios: ");
+                fgets(string, sizeof(string), stdin);
+
+                string[strcspn(string, "\n")] = 0;
+
+                char* result = joinString(string, separator);
+
+                printf("Cadena resultante: %s\n", result);
+
+                free(result);
                 break;
             }
             case 5:{
@@ -168,7 +219,7 @@ int main() {
             case 6: {
                 int valor;
                 printf("Ingrese el numero a formatear ");
-                scanf("%d", &valor);  // Leer el número ingresado por teclado
+                scanf("%d", &valor);
                 formatear_valor_numerico(valor);
                 printf("Valor formateado: %s\n", valor);
                 break;
@@ -264,6 +315,7 @@ void capitalizar_cadena(char cadena[]) {
         }
     }
 }
+
 int verificar_final_cadena(char cadena[], char subcadena[]) {
     int long_cadena = strlen(cadena);       // Longitud de la cadena
     int long_subcadena = strlen(subcadena);
