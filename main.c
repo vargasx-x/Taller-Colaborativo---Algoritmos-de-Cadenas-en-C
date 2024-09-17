@@ -3,15 +3,11 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-// Prototipos de funciones
-int buscar_ultima_ocurrencia(char cadena[], char subcadena[]);
-
-void capitalizar_cadena(char cadena[]);
-
-int verificar_final_cadena(char cadena[], char subcadena[]);
-
-void formatear_valor_numerico(int valor);
-
+/**
+* Metodo que permite verificar si una cadena de texto es palíndroma
+ * @param cadena cadena a verificar
+ * @return 1 si la cadena es palindroma, 0 si la cadena no es palindroma
+ */
 int isPalindrome(char cadena[]) {
     int inicio = 0;
     int fin = strlen(cadena) - 1;
@@ -43,6 +39,11 @@ int isPalindrome(char cadena[]) {
     return 1; // Es un palíndromo
 }
 
+/**
+ * Metodo que permite validar paréntesis.
+ * @param cadena cadena a validar los parentecis
+ * @return el numero de parentesis que estan bien en la cadena, si no -1.
+ */
 int validate_parentheses(char cadena[]) {
     
     int apertura = 0; 
@@ -71,7 +72,11 @@ int validate_parentheses(char cadena[]) {
 
 void mostrar_menu();
 
-// Función para Dividir una cadena
+/**
+ * Metodo que permite dividir una cadena
+ * @param str cadena de texto
+ * @return apuntador de la cadena de texto
+ */
 char* splitString(const char *str) {
     // Calcular la longitud de la cadena de entrada
     int len = strlen(str);
@@ -92,7 +97,12 @@ char* splitString(const char *str) {
     return array;
 }
 
-// Función para unir palabras en una cadena usando un separador
+/**
+ * Metodo que permite unir palabras en una cadena usando un separador
+ * @param string Cadena de texto a unir
+ * @param separator separador con el que se van a unir
+ * @return una cadena de caracteres que muestra la cadena unida
+ */
 char* joinString(char* string, char separator) {
     // Calcular la longitud de la cadena de entrada
     int length = strlen(string);
@@ -131,14 +141,128 @@ char* joinString(char* string, char separator) {
     return result;
 }
 
+/**
+ * Metodo que permite buscar la última ocurrencia de una subcadena
+ * @param cadena Cadena de texto principal
+ * @param subcadena cadena de texto a validar
+ * @return retorna la posicion en donde empieza la subcadena si cumple con la ultima ocurrencia, si no hay retorna 0.
+ */
+int buscar_ultima_ocurrencia(char cadena[], char subcadena[]) {
+    int ultima_pos = -1;
+    char *ptr = strstr(cadena, subcadena); // Buscar la primera ocurrencia
 
-// Función principal
+    // Iterar mientras se encuentren ocurrencias
+    while (ptr != NULL) {
+        ultima_pos = ptr - cadena; // Actualizar la última posición encontrada
+        ptr = strstr(ptr + 1, subcadena); // Buscar desde la siguiente posición
+    }
+
+    return ultima_pos >= 0 ? ultima_pos + 1 : 0; // Retornar 0 si no hay ocurrencia
+}
+
+/**
+ * Metodo que permite Capitalizar una cadena de texto
+ * @param cadena cadena a capitalizar
+ */
+void capitalizar_cadena(char cadena[]) {
+    int capitalizar = 1;
+    for (int i = 0; cadena[i] != '\0'; i++) {
+        if (isspace(cadena[i])) {
+            capitalizar = 1;
+        } else if (capitalizar && isalpha(cadena[i])) {
+            cadena[i] = toupper(cadena[i]);
+            capitalizar = 0;
+        }
+    }
+}
+
+/**
+ * Metodo que permite verificar si una cadena de texto termina con una subcadena
+ * @param cadena Cadena principal
+ * @param subcadena Subcadena a verificar
+ * @return retorna 1 si la cadena termina con la subcadena, en caso contrario retorna 0.
+ */
+int verificar_final_cadena(char cadena[], char subcadena[]) {
+    int long_cadena = strlen(cadena);       // Longitud de la cadena
+    int long_subcadena = strlen(subcadena);
+
+    // Verificar si la subcadena es más la rga que la cadena principal
+    if (long_subcadena > long_cadena) {
+        return 0;
+    }
+
+    int pos_inicio_sub = long_cadena - long_subcadena;
+
+    // Comparamos cada carácter de la subcadena con los caracteres finales de la cadena
+    for (int i = 0; i < long_subcadena; i++) {
+        char caracter_cadena = cadena[pos_inicio_sub + i];
+        char caracter_subcadena = subcadena[i];
+
+        if (caracter_cadena != caracter_subcadena) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+/**
+ * Metodo que permite formatear un valor numerico en una cadena de caracteres
+ * @param valor Valor a formatear.
+ */
+void formatear_valor_numerico(int valor) {
+    char num[20];
+    char num_formateado[30]; // Arreglo para almacenar la versión con separadores y signo de pesos
+    int len_num, i, j = 0;
+    int contador = 0;
+
+    // Convertir el número a cadena de texto
+    sprintf(num, "%d", valor);
+
+    len_num = strlen(num);
+
+    num_formateado[j++] = '$';
+
+    // Calcular cuántos dígitos vienen antes del primer separador de miles
+    int primeros_digitos = strlen(num) % 3;
+    if (primeros_digitos == 0) {
+        primeros_digitos = 3;
+    }
+
+    // Copiar los primeros dígitos sin separador
+    for (i = 0; i < primeros_digitos; i++) {
+        num_formateado[j++] = num[i];
+    }
+
+    // Añadir separadores de miles para el resto de los dígitos
+    for (; i < len_num; i++) {
+        if ((i - primeros_digitos) % 3 == 0) {
+            num_formateado[j++] = ',';  
+        }
+        num_formateado[j++] = num[i];
+    }
+
+    // Imprimir el número formateado
+    printf("Valor formateado: %s\n", num_formateado);
+
+}
+/**
+ * Metodo principal
+ */
 int main() {
     char* array = NULL;
     int opcion;
     do {
         mostrar_menu();
-        scanf("%d", &opcion);
+        if (scanf("%d", &opcion) != 1) {
+            // Si scanf no puede leer un número
+            printf("Opción no válida. Por favor, ingrese un número.\n");
+            // Limpiar el búfer de entrada
+            while (getchar() != '\n');
+            continue; // Saltar el resto del ciclo y volver a mostrar el menú
+        }
+
+        // Limpiar el búfer de entrada
         getchar();
 
         switch (opcion) {
@@ -209,25 +333,27 @@ int main() {
                 fgets(subcadena, 50, stdin);
                 int bool = verificar_final_cadena(cadena, subcadena);
                 if (bool == 0)
-                    printf("La subcadena no finaliza la cadena principal \n");
+                    printf(" %d, La subcadena no finaliza la cadena principal \n", bool);
                 else
-                    printf("La subcadena finaliza la cadena principal\n");
-                break;
+                    printf(" %d, La subcadena finaliza la cadena principal\n", bool);
                 break;
             }
 
             case 6: {
                 int valor;
-                printf("Ingrese el numero a formatear ");
+                printf("Ingrese el numero a formatear: ");
                 scanf("%d", &valor);
+
+                // Aquí llamamos a la función que formatea el valor
                 formatear_valor_numerico(valor);
-                printf("Valor formateado: %s\n", valor);
+
+                // Volverá a mostrar el menú sin salir del programa
                 break;
             }
 
             case 7:{
                 char cadena[50];
-                
+
                 printf("Introduce una cadena de texto: ");
                 fgets(cadena, sizeof(cadena), stdin);
 
@@ -249,9 +375,9 @@ int main() {
                 char cadena[100];
                 printf("Ingrese una cadena para validar los parentesis: ");
                 fgets(cadena, 100, stdin);
-    
+
                 int resultado = validate_parentheses(cadena);
-    
+
                 if (resultado == -1) {
                     printf("Los parentesis de apertura NO corresponden a los de cierre.\n");
                 } else {
@@ -269,12 +395,13 @@ int main() {
         }
     } while (opcion != 0);
 
-    return 0;
 }
 
-// Función para mostrar el menú
+/**
+ * Metodo que permite mostrar el menú
+ */
 void mostrar_menu() {
-    printf("\n--- Menu de Opciones ---\n");
+    printf("\n--- MENU PRINCIPAL ---\n");
     printf("1. Buscar la ultima ocurrencia de una subcadena\n");
     printf("2. Capitalizar una cadena de texto\n");
     printf("3. Dividir una Cadena en un arreglo de Caracteres\n");
@@ -286,91 +413,4 @@ void mostrar_menu() {
 
     printf("0. Salir\n");
     printf("Elija una opcion: ");
-}
-
-// Función para buscar la última ocurrencia de una subcadena
-int buscar_ultima_ocurrencia(char cadena[], char subcadena[]) {
-    int ultima_pos = -1;
-    char *ptr = strstr(cadena, subcadena); // Buscar la primera ocurrencia
-
-    // Iterar mientras se encuentren ocurrencias
-    while (ptr != NULL) {
-        ultima_pos = ptr - cadena; // Actualizar la última posición encontrada
-        ptr = strstr(ptr + 1, subcadena); // Buscar desde la siguiente posición
-    }
-
-    return ultima_pos >= 0 ? ultima_pos + 1 : 0; // Retornar 0 si no hay ocurrencia
-}
-
-// Capitalizar una cadena de texto
-void capitalizar_cadena(char cadena[]) {
-    int capitalizar = 1;
-    for (int i = 0; cadena[i] != '\0'; i++) {
-        if (isspace(cadena[i])) {
-            capitalizar = 1;
-        } else if (capitalizar && isalpha(cadena[i])) {
-            cadena[i] = toupper(cadena[i]);
-            capitalizar = 0;
-        }
-    }
-}
-
-int verificar_final_cadena(char cadena[], char subcadena[]) {
-    int long_cadena = strlen(cadena);       // Longitud de la cadena
-    int long_subcadena = strlen(subcadena);
-
-    // Verificar si la subcadena es más larga que la cadena principal
-    if (long_subcadena > long_cadena) {
-        return 0;
-    }
-
-    int pos_inicio_sub = long_cadena - long_subcadena;
-
-    // Comparamos cada carácter de la subcadena con los caracteres finales de la cadena
-    for (int i = 0; i < long_subcadena; i++) {
-        char caracter_cadena = cadena[pos_inicio_sub + i];
-        char caracter_subcadena = subcadena[i];
-
-        if (caracter_cadena != caracter_subcadena) {
-            return 0;
-        }
-    }
-
-    return 1;
-}
-
-void formatear_valor_numerico(int valor) {
-    char num[20];
-    char num_formateado[30]; // Arreglo para almacenar la versión con separadores y signo de pesos
-    int len_num, i, j = 0;
-    int contador = 0;
-
-    // Convertir el número a cadena de texto
-    sprintf(num, "%d", valor);
-
-    len_num = strlen(num);
-
-    num_formateado[j++] = '$';
-
-    // Calcular cuántos dígitos vienen antes del primer separador de miles
-    int primeros_digitos = strlen(num) % 3;
-    if (primeros_digitos == 0) {
-        primeros_digitos = 3;
-    }
-
-    // Copiar los primeros dígitos sin separador
-    for (i = 0; i < primeros_digitos; i++) {
-        num_formateado[j++] = num[i];
-    }
-
-    // Añadir separadores de miles para el resto de los dígitos
-    for (; i < len_num; i++) {
-        if ((i - primeros_digitos) % 3 == 0) {
-            num_formateado[j++] = ',';  
-        }
-        num_formateado[j++] = num[i];
-    }
-
-    // Imprimir el número formateado
-    printf("Valor formateado: %s\n", num_formateado);
 }
