@@ -1,39 +1,340 @@
+#define DELIMITADOR " " // Definir el delimitador para la separación (en este caso, espacios)
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
 
 // Prototipos de funciones
-int buscar_ultima_ocurrencia(char cadena[], char subcadena[]);
+/**
+ * @brief Busca la última ocurrencia de una subcadena dentro de una cadena principal.
+ *
+ * Esta función recorre la cadena principal buscando la última aparición de la subcadena proporcionada.
+ * Si la subcadena no se encuentra, devuelve 0. Si la subcadena es más larga que la cadena principal, también devuelve 0.
+ *
+ * @param cadena La cadena principal en la que se busca la subcadena.
+ * @param subcadena La subcadena que se busca en la cadena principal.
+ * @return int La posición de la última ocurrencia de la subcadena, o 0 si no se encuentra.
+ */
+int findLastOccurrence(char cadena[], char subcadena[]);
 
-void capitalizar_cadena(char cadena[]);
+/**
+ * @brief Capitaliza la primera letra de cada palabra en una cadena.
+ *
+ * Esta función convierte la primera letra de cada palabra en una cadena a mayúscula. Las palabras están definidas por la presencia de espacios u otros caracteres de espacio.
+ * Ejemplo:
+ * Si la entrada es "hola mundo", la salida será "Hola Mundo".
+ *
+ * @param cadena La cadena de texto que se desea capitalizar.
+ */
+void capitalizeString(char cadena[]);
 
-int verificar_final_cadena(char cadena[], char subcadena[]);
+/**
+ * @brief Verifica si una cadena termina con una subcadena específica.
+ *
+ * Esta función compara la parte final de una cadena con una subcadena dada para determinar si la cadena termina con la subcadena proporcionada.
+ * Ejemplo:
+ * Para la cadena "programacion en C" y la subcadena "en C", la función devuelve 1.
+ *
+ * @param cadena La cadena principal que se va a verificar.
+ * @param subcadena La subcadena que se compara con el final de la cadena principal.
+ * @return int 1 si la cadena termina con la subcadena, 0 si no.
+ */
+int verifyStringEnd(char cadena[], char subcadena[]);
 
-void formatear_valor_numerico(int valor);
+/**
+ * @brief Formatea un valor numérico en formato de moneda.
+ *
+ * Esta función convierte un número entero a una cadena de texto con formato de moneda, incluyendo el signo de dólar '$' y separadores de miles ','.
+ *
+ * @param valor El número entero que se desea formatear.
+ */
+void formatNumericValue(int valor);
 
-int isPalindrome(char cadena[]) {
+/**
+ * @brief Valida los paréntesis en una cadena de texto.
+ *
+ * Esta función revisa una cadena para asegurar que todos los paréntesis de apertura '(' tienen un paréntesis de cierre correspondiente ')'.
+ * Retorna diferentes códigos de error dependiendo del tipo de desbalance:
+ *   - `ERROR_PARANTESIS_APERTURA_SIN_CIERRE` (-1): Hay paréntesis de apertura sin cerrar.
+ *   - `ERROR_PARANTESIS_CIERRE_SIN_APERTURA` (-2): Hay paréntesis de cierre sin apertura correspondiente.
+ *   - Número positivo: Cantidad de pares de paréntesis correctamente balanceados.
+ *
+ * @param cadena La cadena de texto a validar.
+ * @return int Un código de error o el número de pares de paréntesis balanceados.
+ */
+int validate_parentheses(char cadena[]);
+
+/**
+ * @brief Divide una cadena en un arreglo de tokens utilizando un delimitador.
+ *
+ * Esta función divide una cadena de texto en múltiples tokens basados en un delimitador específico y retorna un arreglo de punteros a estos tokens.
+ * Ejemplo:
+ * Si la entrada es "uno,dos,tres" y el delimitador es ",", el resultado será un arreglo de cadenas {"uno", "dos", "tres"}.
+ *
+ * @param str La cadena de texto que se va a dividir.
+ * @param delimitador El delimitador que se utiliza para dividir la cadena.
+ * @param numTokens Puntero a un entero que será actualizado con el número de tokens encontrados.
+ * @return char** Un arreglo de punteros a los tokens, o NULL si ocurre un error.
+ */
+char **splitString(const char *str, const char *delimitador, int *numTokens);
+
+/**
+ * @brief Une palabras en una cadena usando un separador específico.
+ *
+ * Esta función toma una cadena de texto en la que las palabras están separadas por espacios
+ * y las une en una sola cadena utilizando un separador específico.
+ * Ejemplo:
+ * Si la entrada es "palabra1 palabra2 palabra3" y el separador es '-', la salida será "palabra1-palabra2-palabra3".
+ *
+ * @param string La cadena de texto que contiene las palabras a unir.
+ * @param separator El carácter que se usará como separador entre las palabras.
+ * @return char* La cadena resultante con las palabras unidas por el separador, o NULL si ocurre un error.
+ */
+char *joinString(char *string, char separator);
+
+/**
+ * @brief Verifica si una cadena es un palíndromo.
+ *
+ * Esta función determina si una cadena es un palíndromo, ignorando caracteres no alfanuméricos y considerando mayúsculas y minúsculas como equivalentes.
+ * Ejemplo:
+ * Para la cadena "A man a plan a canal Panama", la función devuelve 1.
+ *
+ * @param cadena La cadena de texto a verificar.
+ * @return int 1 si la cadena es un palíndromo, 0 si no.
+ */
+int isPalindrome(char cadena[]);
+
+// Función para mostrar el menú
+void mostrar_menu();
+
+// Definición de errores para paréntesis
+#define ERROR_PARANTESIS_APERTURA_SIN_CIERRE -1
+#define ERROR_PARANTESIS_CIERRE_SIN_APERTURA -2
+int main()
+{
+    char *array = NULL;
+    int opcion;
+
+    do
+    {
+        mostrar_menu();
+        if (scanf("%d", &opcion) != 1)
+        {
+            // Si scanf falla en leer un entero, limpiamos el buffer y mostramos error
+            fprintf(stderr, "Entrada no válida. Intente de nuevo.\n");
+            while (getchar() != '\n')
+                ; // Limpiar buffer
+            continue;
+        }
+        getchar(); // Consumir el salto de línea después de scanf
+
+        switch (opcion)
+        {
+        case 1:
+        {
+            char cadena[100], subcadena[50];
+            printf("Ingrese la cadena principal: ");
+            fgets(cadena, 100, stdin);
+            printf("Ingrese la subcadena a buscar: ");
+            fgets(subcadena, 50, stdin);
+
+            // Validar que las cadenas no estén vacías
+            if (strlen(cadena) == 0 || strlen(subcadena) == 0)
+            {
+                fprintf(stderr, "Error: Las cadenas no pueden estar vacías.\n");
+                break;
+            }
+
+            int posicion = findLastOccurrence(cadena, subcadena);
+            if (posicion > 0)
+                printf("La última ocurrencia comienza en la posición %d\n", posicion);
+            else
+                printf("Subcadena no encontrada\n");
+            break;
+        }
+        case 2:
+        {
+            char cadena[100];
+            printf("Ingrese una cadena para capitalizar: ");
+            fgets(cadena, 100, stdin);
+
+            if (strlen(cadena) == 0)
+            {
+                fprintf(stderr, "Error: La cadena no puede estar vacía.\n");
+                break;
+            }
+
+            capitalizeString(cadena);
+            printf("Cadena capitalizada: %s\n", cadena);
+            break;
+        }
+        case 3:
+        {
+            char input[100];
+            int numTokens;
+
+            printf("Ingrese una cadena: ");
+            fgets(input, sizeof(input), stdin);
+
+            input[strcspn(input, "\n")] = '\0'; // Eliminar el salto de línea
+
+            // Llamar a la función splitString
+            char **array = splitString(input, DELIMITADOR, &numTokens);
+
+            // Validar que la función retornó correctamente
+            if (array != NULL)
+            {
+                printf("La cadena dividida es:\n");
+                for (int i = 0; i < numTokens; i++)
+                {
+                    printf("%s\n", array[i]);
+                    free(array[i]); // Liberar memoria de cada token
+                }
+                free(array); // Liberar memoria del arreglo de tokens
+            }
+            else
+            {
+                fprintf(stderr, "Error al dividir la cadena.\n");
+            }
+            break;
+        }
+        case 4:
+        {
+            char cadena[100], subcadena[50];
+            printf("Ingrese la cadena principal: ");
+            fgets(cadena, 100, stdin);
+            printf("Ingrese la subcadena a verificar: ");
+            fgets(subcadena, 50, stdin);
+
+            // Validar que las cadenas no estén vacías
+            if (strlen(cadena) == 0 || strlen(subcadena) == 0)
+            {
+                fprintf(stderr, "Error: Las cadenas no pueden estar vacías.\n");
+                break;
+            }
+
+            int resultado = verifyStringEnd(cadena, subcadena);
+            if (resultado)
+                printf("La cadena termina con la subcadena.\n");
+            else
+                printf("La cadena no termina con la subcadena.\n");
+            break;
+        }
+        case 5:
+        {
+            int valor;
+            printf("Ingrese un valor numérico: ");
+            if (scanf("%d", &valor) != 1)
+            {
+                fprintf(stderr, "Entrada no válida. Intente de nuevo.\n");
+                while (getchar() != '\n')
+                    ; // Limpiar buffer
+                break;
+            }
+
+            formatNumericValue(valor);
+            break;
+        }
+        case 6:
+        {
+            char cadena[100];
+            printf("Ingrese una cadena para validar paréntesis: ");
+            fgets(cadena, 100, stdin);
+
+            // Validar que la cadena no esté vacía
+            if (strlen(cadena) == 0)
+            {
+                fprintf(stderr, "Error: La cadena no puede estar vacía.\n");
+                break;
+            }
+
+            int resultado = validate_parentheses(cadena);
+            if (resultado == ERROR_PARANTESIS_APERTURA_SIN_CIERRE)
+                printf("Error: Hay paréntesis de apertura sin cerrar.\n");
+            else if (resultado == ERROR_PARANTESIS_CIERRE_SIN_APERTURA)
+                printf("Error: Hay paréntesis de cierre sin apertura correspondiente.\n");
+            else
+                printf("Número de pares de paréntesis balanceados: %d\n", resultado);
+            break;
+        }
+        case 7:
+        {
+            char cadena[100];
+            printf("Ingrese una cadena para verificar si es palíndromo: ");
+            fgets(cadena, 100, stdin);
+
+            // Validar que la cadena no esté vacía
+            if (strlen(cadena) == 0)
+            {
+                fprintf(stderr, "Error: La cadena no puede estar vacía.\n");
+                break;
+            }
+
+            int resultado = isPalindrome(cadena);
+            if (resultado)
+                printf("La cadena es un palíndromo.\n");
+            else
+                printf("La cadena no es un palíndromo.\n");
+            break;
+        }
+        case 8:
+            printf("Saliendo del programa...\n");
+            break;
+        default:
+            printf("Opción no válida. Intente de nuevo.\n");
+            break;
+        }
+    } while (opcion != 8);
+
+    return 0;
+}
+
+void mostrar_menu()
+{
+    printf("\nMenú de Opciones:\n");
+    printf("1. Buscar última ocurrencia de una subcadena\n");
+    printf("2. Capitalizar cadena\n");
+    printf("3. Dividir cadena\n");
+    printf("4. Verificar final de cadena\n");
+    printf("5. Formatear valor numérico\n");
+    printf("6. Validar paréntesis\n");
+    printf("7. Verificar palíndromo\n");
+    printf("8. Salir\n");
+    printf("Seleccione una opción: ");
+}
+
+int isPalindrome(char cadena[])
+{
     int inicio = 0;
     int fin = strlen(cadena) - 1;
 
-    for (int i = 0; cadena[i] != '\0'; i++) {
-        if (isdigit(cadena[i])) {
+    for (int i = 0; cadena[i] != '\0'; i++)
+    {
+        if (isdigit(cadena[i]))
+        {
             printf("Error: La cadena contiene valores numericos, solo se permiten letras.\n");
             return 0; // Si contiene números, no es válida.
         }
     }
 
     // Recorremos la cadena de extremo a extremo
-    while (inicio < fin) {
+    while (inicio < fin)
+    {
 
         // Ignoramos los caracteres que no sean letras o dígitos numéricos
-        if (!isalnum(cadena[inicio])) {
+        if (!isalnum(cadena[inicio]))
+        {
             inicio++;
-        } else if (!isalnum(cadena[fin])) {
+        }
+        else if (!isalnum(cadena[fin]))
+        {
             fin--;
-        } else {
+        }
+        else
+        {
             // Comparar los caracteres en minúsculas
-            if (tolower(cadena[inicio]) != tolower(cadena[fin])) {
+            if (tolower(cadena[inicio]) != tolower(cadena[fin]))
+            {
                 return 0; // No es un palíndromo
             }
             inicio++;
@@ -43,64 +344,119 @@ int isPalindrome(char cadena[]) {
     return 1; // Es un palíndromo
 }
 
-int validate_parentheses(char cadena[]) {
-    
-    int apertura = 0; 
-    int pares = 0;   
-    for (int i = 0; cadena[i] != '\0'; i++) {
-        if (cadena[i] == '(') {
+#define ERROR_PARANTESIS_APERTURA_SIN_CIERRE -1
+#define ERROR_PARANTESIS_CIERRE_SIN_APERTURA -2
+
+int validate_parentheses(char cadena[])
+{
+    int apertura = 0;
+    int pares = 0;
+
+    for (int i = 0; cadena[i] != '\0'; i++)
+    {
+        if (cadena[i] == '(')
+        {
             apertura++; // Encontrar paréntesis de apertura
-        } else if (cadena[i] == ')') {
-            if (apertura > 0) {
+        }
+        else if (cadena[i] == ')')
+        {
+            if (apertura > 0)
+            {
                 apertura--; // Encontrar paréntesis de cierre que corresponde al de apertura
-                pares++;   // Incrementamos el número de pares
-            } else {
+                pares++;    // Incrementamos el número de pares
+            }
+            else
+            {
                 // Si encontramos un paréntesis de cierre sin uno de apertura correspondiente
-                return -1; // Indicar que los paréntesis no están balanceados
+                return ERROR_PARANTESIS_CIERRE_SIN_APERTURA;
             }
         }
     }
-    if (apertura == 0) {
-        // Retorna el número de parentesis pares, si no queda ningún paréntesis sin cerrar
+
+    if (apertura == 0)
+    {
+        // Retorna el número de pares si todos los paréntesis están balanceados
         return pares;
-    } else {
-        // Si la apertura es diferente de 0, hay paréntesis de apertura sin cerrar
-        return -1;
+    }
+    else
+    {
+        // Si queda algún paréntesis de apertura sin cerrar
+        return ERROR_PARANTESIS_APERTURA_SIN_CIERRE;
     }
 }
 
-void mostrar_menu();
-
-// Función para Dividir una cadena
-char* splitString(const char *str) {
-    // Calcular la longitud de la cadena de entrada
-    int len = strlen(str);
-
-    // Reservar memoria para la nueva cadena, incluyendo espacio para el carácter nulo
-    char* array = (char*) malloc((len + 1) * sizeof(char));
-
-    // Verificar si la asignación de memoria fue exitosa
-    if (array == NULL) {
-        printf("Error al asignar memoria.\n");  // Mensaje de error en español
-        return NULL;  // Devolver NULL para indicar fallo
+char **splitString(const char *str, const char *delimitador, int *numTokens)
+{
+    if (str == NULL || strlen(str) == 0)
+    {
+        fprintf(stderr, "Error: La cadena de entrada está vacía o es NULL.\n");
+        *numTokens = 0;
+        return NULL; // Retornar NULL si la cadena está vacía
     }
 
-    // Copiar la cadena de entrada a la memoria recién asignada
-    strcpy(array, str);
+    // Hacer una copia de la cadena original ya que strtok modifica la cadena
+    char *temp = strdup(str);
+    if (temp == NULL)
+    {
+        fprintf(stderr, "Error: No se pudo asignar memoria para la copia de la cadena.\n");
+        exit(EXIT_FAILURE);
+    }
 
-    // Devolver el puntero a la nueva cadena
-    return array;
+    // Inicializar el número de tokens
+    *numTokens = 0;
+
+    // Usar strtok para contar cuántos tokens habrá
+    char *token = strtok(temp, delimitador);
+    while (token != NULL)
+    {
+        (*numTokens)++;
+        token = strtok(NULL, delimitador);
+    }
+
+    // Asignar memoria para el arreglo de punteros a tokens
+    char **tokens = (char **)malloc((*numTokens) * sizeof(char *));
+    if (tokens == NULL)
+    {
+        fprintf(stderr, "Error: No se pudo asignar memoria para tokens.\n");
+        free(temp); // Liberar la memoria de la copia temporal en caso de error
+        exit(EXIT_FAILURE);
+    }
+
+    // Resetear temp para dividir la cadena de nuevo
+    strcpy(temp, str);
+    int index = 0;
+    token = strtok(temp, delimitador);
+    while (token != NULL)
+    {
+        tokens[index++] = strdup(token);
+        token = strtok(NULL, delimitador);
+    }
+
+    // Liberar la memoria de la copia temporal
+    free(temp);
+
+    return tokens;
 }
 
 // Función para unir palabras en una cadena usando un separador
-char* joinString(char* string, char separator) {
+char *joinString(char *string, char separator)
+{
+    // Verificar si la cadena de entrada es NULL
+    if (string == NULL)
+    {
+        fprintf(stderr, "Error: La cadena de entrada es NULL.\n");
+        return NULL;
+    }
+
     // Calcular la longitud de la cadena de entrada
     int length = strlen(string);
 
     // Contar el número de palabras en la cadena (asumiendo que las palabras están separadas por espacios)
     int word_count = 1;
-    for (int i = 0; i < length; i++) {
-        if (string[i] == ' ') {
+    for (int i = 0; i < length; i++)
+    {
+        if (string[i] == ' ')
+        {
             word_count++;
         }
     }
@@ -110,228 +466,113 @@ char* joinString(char* string, char separator) {
     int total_length = length + (word_count - 1) + 1;
 
     // Reservar memoria para la nueva cadena
-    char* result = (char*)malloc(total_length * sizeof(char));
-    if (result == NULL) {
-        printf("Error al asignar memoria.\n");  // Mensaje de error en inglés
-        exit(1);  // Terminar el programa si la asignación de memoria falla
+    char *result = (char *)malloc(total_length * sizeof(char));
+    if (result == NULL)
+    {
+        fprintf(stderr, "Error: No se pudo asignar memoria para el resultado.\n");
+        return NULL; // Maneja el error de memoria
     }
 
     // Copiar la cadena original a la nueva cadena, reemplazando los espacios con el separador
     int j = 0;
-    for (int i = 0; i < length; i++) {
-        if (string[i] == ' ') {
-            result[j++] = separator;  // Reemplazar espacio con el separador
-        } else {
-            result[j++] = string[i];  // Copiar el carácter original
+    for (int i = 0; i < length; i++)
+    {
+        if (string[i] == ' ')
+        {
+            result[j++] = separator; // Reemplazar espacio con el separador
+        }
+        else
+        {
+            result[j++] = string[i]; // Copiar el carácter original
         }
     }
-    result[j] = '\0';  // Añadir el carácter nulo al final de la nueva cadena
+    result[j] = '\0'; // Añadir el carácter nulo al final de la nueva cadena
 
-    // Devolver el puntero a la nueva cadena
     return result;
 }
-
-
-// Función principal
-int main() {
-    char* array = NULL;
-    int opcion;
-    do {
-        mostrar_menu();
-        scanf("%d", &opcion);
-        getchar();
-
-        switch (opcion) {
-            case 1: {
-                char cadena[100], subcadena[50];
-                printf("Ingrese la cadena principal: ");
-                fgets(cadena, 100, stdin);
-                printf("Ingrese la subcadena a buscar: ");
-                fgets(subcadena, 50, stdin);
-                int posicion = buscar_ultima_ocurrencia(cadena, subcadena);
-                if (posicion > 0)
-                    printf("La ultima ocurrencia comienza en la posicion %d\n", posicion);
-                else
-                    printf("Subcadena no encontrada\n");
-                break;
-            }
-            case 2: {
-                char cadena[100];
-                printf("Ingrese una cadena para capitalizar: ");
-                fgets(cadena, 100, stdin);
-                capitalizar_cadena(cadena);
-                printf("Cadena capitalizada: %s\n", cadena);
-                break;
-            }
-            case 3:{
-                char input[100];
-
-                printf("Ingrese una cadena: ");
-                fgets(input, sizeof(input), stdin);
-
-                input[strcspn(input, "\n")] = '\0';
-
-                char *array = splitString(input);
-
-                if (array != NULL) {
-                    printf("El apuntador al arreglo de caracteres es: %p\n", (void *) array);
-                    printf("La cadena copiada en el arreglo es: %s\n", array);
-                    free(array);
-                }
-
-                break;
-            }
-            case 4:{
-                char separator;
-                printf("Introduce el separador de palabras: ");
-                scanf(" %c", &separator);
-
-                getchar();
-
-                char string[1000];
-                printf("Introduce la cadena de palabras separadas por espacios: ");
-                fgets(string, sizeof(string), stdin);
-
-                string[strcspn(string, "\n")] = 0;
-
-                char* result = joinString(string, separator);
-
-                printf("Cadena resultante: %s\n", result);
-
-                free(result);
-                break;
-            }
-            case 5:{
-                char cadena[100], subcadena[50];
-                printf("Ingrese la cadena principal: ");
-                fgets(cadena, 100, stdin);
-                printf("Ingrese la subcadena a revisar: ");
-                fgets(subcadena, 50, stdin);
-                int bool = verificar_final_cadena(cadena, subcadena);
-                if (bool == 0)
-                    printf("La subcadena no finaliza la cadena principal \n");
-                else
-                    printf("La subcadena finaliza la cadena principal\n");
-                break;
-                break;
-            }
-
-            case 6: {
-                int valor;
-                printf("Ingrese el numero a formatear ");
-                scanf("%d", &valor);
-                formatear_valor_numerico(valor);
-                printf("Valor formateado: %s\n", valor);
-                break;
-            }
-
-            case 7:{
-                char cadena[50];
-                
-                printf("Introduce una cadena de texto: ");
-                fgets(cadena, sizeof(cadena), stdin);
-
-            // Eliminamos el salto de línea
-                cadena[strcspn(cadena, "\n")] = 0;
-
-            // Verificar si la cadena de texto es palíndroma
-                if (isPalindrome(cadena)) {
-                    printf("La cadena de texto es un palindromo.\n");
-                } else {
-                    printf("La cadena de texto NO es un palindromo.\n");
-                }
-
-
-                break;
-            }
-
-            case 8:{
-                char cadena[100];
-                printf("Ingrese una cadena para validar los parentesis: ");
-                fgets(cadena, 100, stdin);
-    
-                int resultado = validate_parentheses(cadena);
-    
-                if (resultado == -1) {
-                    printf("Los parentesis de apertura NO corresponden a los de cierre.\n");
-                } else {
-                    printf("Los parentesis de apertura y cierre son correctos, y hay %d pares correctos.\n", resultado);
-                }
-                break;
-
-            }
-
-            case 0:
-                printf("Saliendo...\n");
-                break;
-            default:
-                printf("Opcion no valida\n");
-        }
-    } while (opcion != 0);
-
-    return 0;
-}
-
-// Función para mostrar el menú
-void mostrar_menu() {
-    printf("\n--- Menu de Opciones ---\n");
-    printf("1. Buscar la ultima ocurrencia de una subcadena\n");
-    printf("2. Capitalizar una cadena de texto\n");
-    printf("3. Dividir una Cadena en un arreglo de Caracteres\n");
-    printf("4. Unir arreglo de caracteres en una cadena\n");
-    printf("5. Verificar si una cadena de texto termina con otra\n");
-    printf("6. Formatear un valor numerico\n");
-    printf("7. Verificar si una cadena de texto es palíndroma\n");
-    printf("8. Validar parentesis\n");
-
-    printf("0. Salir\n");
-    printf("Elija una opcion: ");
-}
-
 // Función para buscar la última ocurrencia de una subcadena
-int buscar_ultima_ocurrencia(char cadena[], char subcadena[]) {
+int findLastOccurrence(char cadena[], char subcadena[])
+{
+    int i, j;
     int ultima_pos = -1;
-    char *ptr = strstr(cadena, subcadena); // Buscar la primera ocurrencia
+    int len_cadena = strlen(cadena);
+    int len_subcadena = strlen(subcadena);
 
-    // Iterar mientras se encuentren ocurrencias
-    while (ptr != NULL) {
-        ultima_pos = ptr - cadena; // Actualizar la última posición encontrada
-        ptr = strstr(ptr + 1, subcadena); // Buscar desde la siguiente posición
+    // Verificar si la subcadena es más larga que la cadena principal
+    if (len_subcadena > len_cadena)
+    {
+        return 0; // La subcadena no puede encontrarse si es más larga que la cadena principal
     }
 
-    return ultima_pos >= 0 ? ultima_pos + 1 : 0; // Retornar 0 si no hay ocurrencia
+    // Eliminar el salto de línea final, si existe
+    if (cadena[len_cadena - 1] == '\n')
+    {
+        cadena[len_cadena - 1] = '\0';
+        len_cadena--;
+    }
+    if (subcadena[len_subcadena - 1] == '\n')
+    {
+        subcadena[len_subcadena - 1] = '\0';
+        len_subcadena--;
+    }
+
+    for (i = 0; i <= len_cadena - len_subcadena; i++)
+    {
+        for (j = 0; j < len_subcadena; j++)
+        {
+            if (cadena[i + j] != subcadena[j])
+            {
+                break; // Salir del bucle si no coinciden los caracteres
+            }
+        }
+        if (j == len_subcadena)
+        {
+            ultima_pos = i; // Actualizar la última posición encontrada
+        }
+    }
+
+    return (ultima_pos >= 0) ? ultima_pos + 1 : 0; // Devolver la posición (1-indexada) o 0 si no se encuentra
 }
 
 // Capitalizar una cadena de texto
-void capitalizar_cadena(char cadena[]) {
+void capitalizeString(char cadena[])
+{
     int capitalizar = 1;
-    for (int i = 0; cadena[i] != '\0'; i++) {
-        if (isspace(cadena[i])) {
+    for (int i = 0; cadena[i] != '\0'; i++)
+    {
+        if (isspace(cadena[i]))
+        {
             capitalizar = 1;
-        } else if (capitalizar && isalpha(cadena[i])) {
+        }
+        else if (capitalizar && isalpha(cadena[i]))
+        {
             cadena[i] = toupper(cadena[i]);
             capitalizar = 0;
         }
     }
 }
 
-int verificar_final_cadena(char cadena[], char subcadena[]) {
-    int long_cadena = strlen(cadena);       // Longitud de la cadena
+int verifyStringEnd(char cadena[], char subcadena[])
+{
+    int long_cadena = strlen(cadena); // Longitud de la cadena
     int long_subcadena = strlen(subcadena);
 
     // Verificar si la subcadena es más larga que la cadena principal
-    if (long_subcadena > long_cadena) {
+    if (long_subcadena > long_cadena)
+    {
         return 0;
     }
 
     int pos_inicio_sub = long_cadena - long_subcadena;
 
     // Comparamos cada carácter de la subcadena con los caracteres finales de la cadena
-    for (int i = 0; i < long_subcadena; i++) {
+    for (int i = 0; i < long_subcadena; i++)
+    {
         char caracter_cadena = cadena[pos_inicio_sub + i];
         char caracter_subcadena = subcadena[i];
 
-        if (caracter_cadena != caracter_subcadena) {
+        if (caracter_cadena != caracter_subcadena)
+        {
             return 0;
         }
     }
@@ -339,37 +580,43 @@ int verificar_final_cadena(char cadena[], char subcadena[]) {
     return 1;
 }
 
-void formatear_valor_numerico(int valor) {
+void formatNumericValue(int valor)
+{
     char num[20];
-    char num_formateado[30]; // Arreglo para almacenar la versión con separadores y signo de pesos
-    int len_num, i, j = 0;
-    int contador = 0;
+    static char num_formateado[30]; // Usamos static para que la memoria se mantenga fuera de la función
 
     // Convertir el número a cadena de texto
     sprintf(num, "%d", valor);
 
-    len_num = strlen(num);
+    int len_num = strlen(num);
+    int j = 0;
 
-    num_formateado[j++] = '$';
+    num_formateado[j++] = '$'; // Añadir el signo de pesos
 
     // Calcular cuántos dígitos vienen antes del primer separador de miles
-    int primeros_digitos = strlen(num) % 3;
-    if (primeros_digitos == 0) {
+    int primeros_digitos = len_num % 3;
+    if (primeros_digitos == 0)
+    {
         primeros_digitos = 3;
     }
 
     // Copiar los primeros dígitos sin separador
-    for (i = 0; i < primeros_digitos; i++) {
+    for (int i = 0; i < primeros_digitos; i++)
+    {
         num_formateado[j++] = num[i];
     }
 
     // Añadir separadores de miles para el resto de los dígitos
-    for (; i < len_num; i++) {
-        if ((i - primeros_digitos) % 3 == 0) {
-            num_formateado[j++] = ',';  
+    for (int i = primeros_digitos; i < len_num; i++)
+    {
+        if ((i - primeros_digitos) % 3 == 0)
+        {
+            num_formateado[j++] = ','; // Añadir el separador de miles
         }
-        num_formateado[j++] = num[i];
+        num_formateado[j++] = num[i]; // Añadir el siguiente dígito
     }
+
+    num_formateado[j] = '\0'; // Terminar la cadena
 
     // Imprimir el número formateado
     printf("Valor formateado: %s\n", num_formateado);
