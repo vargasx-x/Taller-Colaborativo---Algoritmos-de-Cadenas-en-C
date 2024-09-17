@@ -120,6 +120,26 @@ int main()
         case 4:
         {
             char cadena[100], subcadena[50];
+            printf("Ingrese la cadena a unir: ");
+            fgets(cadena, 100, stdin);
+            printf("Ingrese el separador: ");
+            fgets(subcadena, 50, stdin);
+
+            // Validar que las cadenas no estén vacías
+            if (strlen(cadena) == 0 || strlen(subcadena) == 0)
+            {
+                fprintf(stderr, "Error: Las cadenas no pueden estar vacías.\n");
+                break;
+            }
+
+            char *unionCadena = joinString(cadena, subcadena);
+
+            printf("La union de la cadena es %s \n", unionCadena);
+            break;
+        }
+        case 5:
+        {
+            char cadena[100], subcadena[50];
             printf("Ingrese la cadena principal: ");
             fgets(cadena, 100, stdin);
             printf("Ingrese la subcadena a verificar: ");
@@ -139,7 +159,7 @@ int main()
                 printf("La cadena no termina con la subcadena.\n");
             break;
         }
-        case 5:
+        case 6:
         {
             int valor;
             printf("Ingrese un valor numérico: ");
@@ -154,7 +174,7 @@ int main()
             formatNumericValue(valor);
             break;
         }
-        case 6:
+        case 7:
         {
             char cadena[100];
             printf("Ingrese una cadena para validar paréntesis: ");
@@ -176,7 +196,7 @@ int main()
                 printf("Número de pares de paréntesis balanceados: %d\n", resultado);
             break;
         }
-        case 7:
+        case 8:
         {
             char cadena[100];
             printf("Ingrese una cadena para verificar si es palíndromo: ");
@@ -196,7 +216,7 @@ int main()
                 printf("La cadena no es un palíndromo.\n");
             break;
         }
-        case 8:
+        case 9:
             printf("Saliendo del programa...\n");
             break;
         default:
@@ -214,11 +234,12 @@ void mostrar_menu()
     printf("1. Buscar última ocurrencia de una subcadena\n");
     printf("2. Capitalizar cadena\n");
     printf("3. Dividir cadena\n");
-    printf("4. Verificar final de cadena\n");
-    printf("5. Formatear valor numérico\n");
-    printf("6. Validar paréntesis\n");
-    printf("7. Verificar palíndromo\n");
-    printf("8. Salir\n");
+    printf("4. Unir cadena\n");
+    printf("5. Verificar final de cadena\n");
+    printf("6. Formatear valor numérico\n");
+    printf("7. Validar paréntesis\n");
+    printf("8. Verificar palíndromo\n");
+    printf("9. Salir\n");
     printf("Seleccione una opción: ");
 }
 /**
@@ -530,6 +551,7 @@ void capitalizeString(char cadena[])
         }
     }
 }
+
 /**
  * @brief Verifica si una cadena termina con una subcadena específica.
  *
