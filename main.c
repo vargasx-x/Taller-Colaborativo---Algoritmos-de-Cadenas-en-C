@@ -5,103 +5,21 @@
 #include <stdlib.h>
 
 // Prototipos de funciones
-/**
- * @brief Busca la última ocurrencia de una subcadena dentro de una cadena principal.
- *
- * Esta función recorre la cadena principal buscando la última aparición de la subcadena proporcionada.
- * Si la subcadena no se encuentra, devuelve 0. Si la subcadena es más larga que la cadena principal, también devuelve 0.
- *
- * @param cadena La cadena principal en la que se busca la subcadena.
- * @param subcadena La subcadena que se busca en la cadena principal.
- * @return int La posición de la última ocurrencia de la subcadena, o 0 si no se encuentra.
- */
+
 int findLastOccurrence(char cadena[], char subcadena[]);
 
-/**
- * @brief Capitaliza la primera letra de cada palabra en una cadena.
- *
- * Esta función convierte la primera letra de cada palabra en una cadena a mayúscula. Las palabras están definidas por la presencia de espacios u otros caracteres de espacio.
- * Ejemplo:
- * Si la entrada es "hola mundo", la salida será "Hola Mundo".
- *
- * @param cadena La cadena de texto que se desea capitalizar.
- */
 void capitalizeString(char cadena[]);
 
-/**
- * @brief Verifica si una cadena termina con una subcadena específica.
- *
- * Esta función compara la parte final de una cadena con una subcadena dada para determinar si la cadena termina con la subcadena proporcionada.
- * Ejemplo:
- * Para la cadena "programacion en C" y la subcadena "en C", la función devuelve 1.
- *
- * @param cadena La cadena principal que se va a verificar.
- * @param subcadena La subcadena que se compara con el final de la cadena principal.
- * @return int 1 si la cadena termina con la subcadena, 0 si no.
- */
 int verifyStringEnd(char cadena[], char subcadena[]);
 
-/**
- * @brief Formatea un valor numérico en formato de moneda.
- *
- * Esta función convierte un número entero a una cadena de texto con formato de moneda, incluyendo el signo de dólar '$' y separadores de miles ','.
- *
- * @param valor El número entero que se desea formatear.
- */
 void formatNumericValue(int valor);
 
-/**
- * @brief Valida los paréntesis en una cadena de texto.
- *
- * Esta función revisa una cadena para asegurar que todos los paréntesis de apertura '(' tienen un paréntesis de cierre correspondiente ')'.
- * Retorna diferentes códigos de error dependiendo del tipo de desbalance:
- *   - `ERROR_PARANTESIS_APERTURA_SIN_CIERRE` (-1): Hay paréntesis de apertura sin cerrar.
- *   - `ERROR_PARANTESIS_CIERRE_SIN_APERTURA` (-2): Hay paréntesis de cierre sin apertura correspondiente.
- *   - Número positivo: Cantidad de pares de paréntesis correctamente balanceados.
- *
- * @param cadena La cadena de texto a validar.
- * @return int Un código de error o el número de pares de paréntesis balanceados.
- */
 int validate_parentheses(char cadena[]);
 
-/**
- * @brief Divide una cadena en un arreglo de tokens utilizando un delimitador.
- *
- * Esta función divide una cadena de texto en múltiples tokens basados en un delimitador específico y retorna un arreglo de punteros a estos tokens.
- * Ejemplo:
- * Si la entrada es "uno,dos,tres" y el delimitador es ",", el resultado será un arreglo de cadenas {"uno", "dos", "tres"}.
- *
- * @param str La cadena de texto que se va a dividir.
- * @param delimitador El delimitador que se utiliza para dividir la cadena.
- * @param numTokens Puntero a un entero que será actualizado con el número de tokens encontrados.
- * @return char** Un arreglo de punteros a los tokens, o NULL si ocurre un error.
- */
 char **splitString(const char *str, const char *delimitador, int *numTokens);
 
-/**
- * @brief Une palabras en una cadena usando un separador específico.
- *
- * Esta función toma una cadena de texto en la que las palabras están separadas por espacios
- * y las une en una sola cadena utilizando un separador específico.
- * Ejemplo:
- * Si la entrada es "palabra1 palabra2 palabra3" y el separador es '-', la salida será "palabra1-palabra2-palabra3".
- *
- * @param string La cadena de texto que contiene las palabras a unir.
- * @param separator El carácter que se usará como separador entre las palabras.
- * @return char* La cadena resultante con las palabras unidas por el separador, o NULL si ocurre un error.
- */
 char *joinString(char *string, char separator);
 
-/**
- * @brief Verifica si una cadena es un palíndromo.
- *
- * Esta función determina si una cadena es un palíndromo, ignorando caracteres no alfanuméricos y considerando mayúsculas y minúsculas como equivalentes.
- * Ejemplo:
- * Para la cadena "A man a plan a canal Panama", la función devuelve 1.
- *
- * @param cadena La cadena de texto a verificar.
- * @return int 1 si la cadena es un palíndromo, 0 si no.
- */
 int isPalindrome(char cadena[]);
 
 // Función para mostrar el menú
@@ -110,6 +28,7 @@ void mostrar_menu();
 // Definición de errores para paréntesis
 #define ERROR_PARANTESIS_APERTURA_SIN_CIERRE -1
 #define ERROR_PARANTESIS_CIERRE_SIN_APERTURA -2
+
 int main()
 {
     char *array = NULL;
@@ -302,7 +221,16 @@ void mostrar_menu()
     printf("8. Salir\n");
     printf("Seleccione una opción: ");
 }
-
+/**
+ * @brief Verifica si una cadena es un palíndromo.
+ *
+ * Esta función determina si una cadena es un palíndromo, ignorando caracteres no alfanuméricos y considerando mayúsculas y minúsculas como equivalentes.
+ * Ejemplo:
+ * Para la cadena "A man a plan a canal Panama", la función devuelve 1.
+ *
+ * @param cadena La cadena de texto a verificar.
+ * @return int 1 si la cadena es un palíndromo, 0 si no.
+ */
 int isPalindrome(char cadena[])
 {
     int inicio = 0;
@@ -346,7 +274,18 @@ int isPalindrome(char cadena[])
 
 #define ERROR_PARANTESIS_APERTURA_SIN_CIERRE -1
 #define ERROR_PARANTESIS_CIERRE_SIN_APERTURA -2
-
+/**
+ * @brief Valida los paréntesis en una cadena de texto.
+ *
+ * Esta función revisa una cadena para asegurar que todos los paréntesis de apertura '(' tienen un paréntesis de cierre correspondiente ')'.
+ * Retorna diferentes códigos de error dependiendo del tipo de desbalance:
+ *   - `ERROR_PARANTESIS_APERTURA_SIN_CIERRE` (-1): Hay paréntesis de apertura sin cerrar.
+ *   - `ERROR_PARANTESIS_CIERRE_SIN_APERTURA` (-2): Hay paréntesis de cierre sin apertura correspondiente.
+ *   - Número positivo: Cantidad de pares de paréntesis correctamente balanceados.
+ *
+ * @param cadena La cadena de texto a validar.
+ * @return int Un código de error o el número de pares de paréntesis balanceados.
+ */
 int validate_parentheses(char cadena[])
 {
     int apertura = 0;
@@ -384,7 +323,18 @@ int validate_parentheses(char cadena[])
         return ERROR_PARANTESIS_APERTURA_SIN_CIERRE;
     }
 }
-
+/**
+ * @brief Divide una cadena en un arreglo de tokens utilizando un delimitador.
+ *
+ * Esta función divide una cadena de texto en múltiples tokens basados en un delimitador específico y retorna un arreglo de punteros a estos tokens.
+ * Ejemplo:
+ * Si la entrada es "uno,dos,tres" y el delimitador es ",", el resultado será un arreglo de cadenas {"uno", "dos", "tres"}.
+ *
+ * @param str La cadena de texto que se va a dividir.
+ * @param delimitador El delimitador que se utiliza para dividir la cadena.
+ * @param numTokens Puntero a un entero que será actualizado con el número de tokens encontrados.
+ * @return char** Un arreglo de punteros a los tokens, o NULL si ocurre un error.
+ */
 char **splitString(const char *str, const char *delimitador, int *numTokens)
 {
     if (str == NULL || strlen(str) == 0)
@@ -437,7 +387,18 @@ char **splitString(const char *str, const char *delimitador, int *numTokens)
 
     return tokens;
 }
-
+/**
+ * @brief Une palabras en una cadena usando un separador específico.
+ *
+ * Esta función toma una cadena de texto en la que las palabras están separadas por espacios
+ * y las une en una sola cadena utilizando un separador específico.
+ * Ejemplo:
+ * Si la entrada es "palabra1 palabra2 palabra3" y el separador es '-', la salida será "palabra1-palabra2-palabra3".
+ *
+ * @param string La cadena de texto que contiene las palabras a unir.
+ * @param separator El carácter que se usará como separador entre las palabras.
+ * @return char* La cadena resultante con las palabras unidas por el separador, o NULL si ocurre un error.
+ */
 // Función para unir palabras en una cadena usando un separador
 char *joinString(char *string, char separator)
 {
@@ -490,6 +451,16 @@ char *joinString(char *string, char separator)
 
     return result;
 }
+/**
+ * @brief Busca la última ocurrencia de una subcadena dentro de una cadena principal.
+ *
+ * Esta función recorre la cadena principal buscando la última aparición de la subcadena proporcionada.
+ * Si la subcadena no se encuentra, devuelve 0. Si la subcadena es más larga que la cadena principal, también devuelve 0.
+ *
+ * @param cadena La cadena principal en la que se busca la subcadena.
+ * @param subcadena La subcadena que se busca en la cadena principal.
+ * @return int La posición de la última ocurrencia de la subcadena, o 0 si no se encuentra.
+ */
 // Función para buscar la última ocurrencia de una subcadena
 int findLastOccurrence(char cadena[], char subcadena[])
 {
@@ -533,7 +504,15 @@ int findLastOccurrence(char cadena[], char subcadena[])
 
     return (ultima_pos >= 0) ? ultima_pos + 1 : 0; // Devolver la posición (1-indexada) o 0 si no se encuentra
 }
-
+/**
+ * @brief Capitaliza la primera letra de cada palabra en una cadena.
+ *
+ * Esta función convierte la primera letra de cada palabra en una cadena a mayúscula. Las palabras están definidas por la presencia de espacios u otros caracteres de espacio.
+ * Ejemplo:
+ * Si la entrada es "hola mundo", la salida será "Hola Mundo".
+ *
+ * @param cadena La cadena de texto que se desea capitalizar.
+ */
 // Capitalizar una cadena de texto
 void capitalizeString(char cadena[])
 {
@@ -551,7 +530,17 @@ void capitalizeString(char cadena[])
         }
     }
 }
-
+/**
+ * @brief Verifica si una cadena termina con una subcadena específica.
+ *
+ * Esta función compara la parte final de una cadena con una subcadena dada para determinar si la cadena termina con la subcadena proporcionada.
+ * Ejemplo:
+ * Para la cadena "programacion en C" y la subcadena "en C", la función devuelve 1.
+ *
+ * @param cadena La cadena principal que se va a verificar.
+ * @param subcadena La subcadena que se compara con el final de la cadena principal.
+ * @return int 1 si la cadena termina con la subcadena, 0 si no.
+ */
 int verifyStringEnd(char cadena[], char subcadena[])
 {
     int long_cadena = strlen(cadena); // Longitud de la cadena
@@ -579,7 +568,13 @@ int verifyStringEnd(char cadena[], char subcadena[])
 
     return 1;
 }
-
+/**
+ * @brief Formatea un valor numérico en formato de moneda.
+ *
+ * Esta función convierte un número entero a una cadena de texto con formato de moneda, incluyendo el signo de dólar '$' y separadores de miles ','.
+ *
+ * @param valor El número entero que se desea formatear.
+ */
 void formatNumericValue(int valor)
 {
     char num[20];
